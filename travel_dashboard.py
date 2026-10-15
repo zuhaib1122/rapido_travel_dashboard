@@ -50,9 +50,9 @@ st.markdown(
 # create tabs for dashboard , data quality , and report
 tab1, tab2, tab3 = st.tabs(['Data Quality', 'Main Dashboard', 'Report'])
 with tab1:
-    col_header, col_requirements = st.columns([3,1])
+    col_header, col_requirements = st.columns([3,1], wrap = False)
     with col_header:
-        col_a, col_b, col_c = st.columns([0.5,1,0.5])
+        col_a, col_b, col_c = st.columns([0.5,1,0.5], wrap = False)
         with col_b:
             st.markdown("# *Data Exploration & Quality*")
         
@@ -67,7 +67,7 @@ with tab1:
               )
               
     df = load_cleandata("222. Balaji Travels - Rapido.xlsx", "Tips Data (Raw)")
-    col_unclean, col_clean = st.columns([1, 1])
+    col_unclean, col_clean = st.columns([1, 1], wrap = False)
     with col_unclean:
         with st.expander('Overview of UnClean Data'):
             st.dataframe(df.head(), use_container_width=True)
@@ -97,13 +97,13 @@ with tab1:
             st.dataframe(df_clean.head(), use_container_width= True)
     st.markdown("----")
     # check records and unique cars
-    col_rows, col_drivers = st.columns([1, 1])
+    col_rows, col_drivers = st.columns([1, 1], wrap = False)
     with col_rows:
         st.metric('Total Records:', len(df_clean), delta=f"Found {len(df_clean)} records in dataset.")
     with col_drivers:
         st.metric('Drivers:', df_clean['Driver'].nunique(), delta=f"{df_clean['Driver'].nunique()} unique drivers.")
     # vehicles and ratings
-    col_veh, col_rat = st.columns([1, 1])
+    col_veh, col_rat = st.columns([1, 1], wrap = False)
     with col_veh:
         st.metric("Total Vehicles", df_clean['Car No'].nunique(), delta=f"Total {df_clean['Car No'].nunique()} cars.")
     with col_rat:
@@ -112,13 +112,13 @@ with tab1:
     duplicated =  df_clean.duplicated().sum()
     null_values = df_clean.isnull().sum().sum()
     # present in app
-    col_dup, col_null = st.columns([1, 1])
+    col_dup, col_null = st.columns([1, 1], wrap = False)
     with col_dup:
         st.metric(label='Total Duplicate Rows:', value=duplicated, delta=('Clean Data' if duplicated == 0 else 'Action Required'))
     with col_null:
         st.metric(label='Missing Values', value=null_values, delta=('Clean Data' if null_values== 0 else 'Action Required'))
     # date range and columns types
-    col_date, col_col = st.columns([1, 1])
+    col_date, col_col = st.columns([1, 1], wrap = False)
     with col_date:
         st.metric("Date Range", f"({df_clean['Trip Date'].min()} , {df_clean['Trip Date'].max()})")
     with col_col:
@@ -138,7 +138,7 @@ with tab2:
     df_clean['month'] = df_series.dt.strftime('%b')
         
 
-    col_h, col_f = st.columns([2, 1])
+    col_h, col_f = st.columns([2, 1], wrap = False)
     with col_h:
         st.markdown("<h1 style = 'text-align: center; color: #1f77b4;'>Fleet Overview & Financial Insights</h1>", unsafe_allow_html=True)
     with col_f:
@@ -153,7 +153,7 @@ with tab2:
     
     # main kpi's; grooss fare, net earning , rapido fee and fuel cost
     with st.container(border=True):
-        col_1, col_2, col_3, col_4 = st.columns([1,1,1,1])
+        col_1, col_2, col_3, col_4 = st.columns([1,1,1,1], wrap = False)
     with col_1:
         st.metric("Total Gross Fare", f"Rs {filtered_df['Gross Fare'].sum()}")
     with col_2:
@@ -167,7 +167,7 @@ with tab2:
     # pivot table
     monthly_pivot = filtered_df.pivot_table(index = ['month#', 'month'], values = ['Rapido Fee', 'NetEarningAfterFuel'], aggfunc = 'sum').reset_index()
     monthly_pivot = monthly_pivot.sort_values('month#').drop(columns = ['month#'])
-    col_left, col_right = st.columns([2,4])
+    col_left, col_right = st.columns([2,4], wrap = False)
     with col_left:
         st.dataframe(monthly_pivot, use_container_width=True, hide_index=True)
     with col_right:    
@@ -230,7 +230,7 @@ with tab3:
     unsafe_allow_html=True
     )
     # main kpi's 
-    col_1a, col_1b, col_1c, col_1d = st.columns(4)
+    col_1a, col_1b, col_1c, col_1d = st.columns(4, wrap = False)
     col_1a.metric("Total Gross Fare", f"Rs {filtered_df['Gross Fare'].sum()}")
     col_1b.metric("Total Rapido Fee", f"Rs {filtered_df['Rapido Fee'].sum()}")
     col_1c.metric("Net Earning After Fuel", f"Rs {filtered_df['NetEarningAfterFuel'].sum()}")
